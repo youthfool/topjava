@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
+import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
@@ -27,9 +29,9 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Collection<Meal> getAll() {
+    public List<MealTo> getAll() {
         log.info("getAll");
-        return service.getAll(SecurityUtil.authUserId());
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public Meal get(int id) {
@@ -54,15 +56,37 @@ public class MealRestController {
         service.update(meal, SecurityUtil.authUserId());
     }
 
-    public Collection<Meal> getFiltered(LocalDate startDate, LocalTime startTime,
-                                        LocalDate endDate, LocalTime endTime) {
-        if (startTime == null) startTime = LocalTime.MIN;
-        if (endTime == null) endTime = LocalTime.MAX;
-        if (startDate == null) startDate = LocalDate.MIN;
-        if (endDate == null) endDate = LocalDate.MAX;
+    public List<MealTo> getAll(String startDateStr, String startTimeStr,
+                                        String endDateStr, String endTimeStr) {
+        LocalDate startDate;
+        LocalTime startTime;
+        LocalDate endDate;
+        LocalTime endTime;
+
+        if (startTimeStr == null || startTimeStr.isEmpty()) {
+            startTime = LocalTime.MIN;
+        } else {
+            startTime = LocalTime.parse(startTimeStr);
+        }
+        if (endTimeStr == null || endTimeStr.isEmpty()) {
+            endTime = LocalTime.MAX;
+        } else {
+            endTime = LocalTime.parse(endTimeStr);
+        }
+        if (startDateStr == null || startDateStr.isEmpty()) {
+            startDate = LocalDate.MIN;
+        } else {
+            startDate = LocalDate.parse(startDateStr);
+        }
+        if (endDateStr == null || endDateStr.isEmpty()) {
+            endDate = LocalDate.MAX;
+        } else {
+            endDate = LocalDate.parse(endDateStr);
+        }
         log.info("getFiltered startDate={}, startTime={}, endDate={}, endTime={}",
                 startDate, startTime, endDate, endTime);
-        return service.getFiltered(SecurityUtil.authUserId(), startDate, startTime, endDate, endTime);
+        return MealsUtil.getTos(service.getFiltered(SecurityUtil.authUserId(), startDate, startTime, endDate, endTime),
+                SecurityUtil.authUserCaloriesPerDay());
     }
 
 }

@@ -22,21 +22,21 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
 
-            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-
-            mealRestController.create(new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 1, 10, 0), "Завтрак1", 500));
-            mealRestController.getAll().forEach(System.out::println);
-
-            System.out.println(mealRestController.get(3));
-
-            mealRestController.delete(6);
-            mealRestController.getAll().forEach(System.out::println);
-
-            mealRestController.update(new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 2, 10, 0), "Завтрак11", 500), 5);
-            mealRestController.getAll().forEach(System.out::println);
-
-            mealRestController.getFiltered(LocalDate.of(2020, Month.JANUARY, 30), LocalTime.MIN, LocalDate.of(2020, Month.JANUARY, 31), LocalTime.MAX)
-            .forEach(System.out::println);
+//            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
+//
+//            mealRestController.create(new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 1, 10, 0), "Завтрак1", 500));
+//            mealRestController.getAll().forEach(System.out::println);
+//
+//            System.out.println(mealRestController.get(3));
+//
+//            mealRestController.delete(6);
+//            mealRestController.getAll().forEach(System.out::println);
+//
+//            mealRestController.update(new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 2, 10, 0), "Завтрак11", 500), 5);
+//            mealRestController.getAll().forEach(System.out::println);
+//
+//            mealRestController.getFiltered(LocalDate.of(2020, Month.JANUARY, 30), LocalTime.MIN, LocalDate.of(2020, Month.JANUARY, 31), LocalTime.MAX)
+//            .forEach(System.out::println);
 
         }
     }
