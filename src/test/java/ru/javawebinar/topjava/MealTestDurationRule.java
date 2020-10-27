@@ -14,9 +14,10 @@ public class MealTestDurationRule extends Stopwatch {
     protected void finished(long nanos, Description description) {
         String result = String.format("%s spent %d mcs", description.getMethodName(), TimeUnit.NANOSECONDS.toMicros(nanos));
         results.add(result);
+        System.out.println(result);
     }
 
-    protected List<String> getResults() {
+    public List<String> getResults() {
         return results;
     }
 }
